@@ -1,81 +1,513 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>ProjectJS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ProjectJS</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+}
+
+canvas{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+}
+
+nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    padding:22px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    backdrop-filter:blur(10px);
+    background:rgba(0,0,0,.3);
+    border-bottom:1px solid rgba(255,255,255,.05);
+    z-index:100;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:900;
+    letter-spacing:2px;
+    background:linear-gradient(90deg,#ffffff,#7f7fff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.nav-links{
+    display:flex;
+    gap:35px;
+}
+
+.nav-links a{
+    color:#aaa;
+    text-decoration:none;
+    transition:.3s;
+    font-weight:500;
+}
+
+.nav-links a:hover{
+    color:white;
+}
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:120px 30px;
+    position:relative;
+}
+
+.hero-content{
+    max-width:1000px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.1);
+    padding:10px 18px;
+    border-radius:999px;
+    margin-bottom:30px;
+    backdrop-filter:blur(10px);
+    animation:fadeUp 1s ease;
+}
+
+.dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#7f7fff;
+    box-shadow:0 0 15px #7f7fff;
+}
+
+.hero h1{
+    font-size:clamp(60px,10vw,140px);
+    line-height:.9;
+    font-weight:900;
+    margin-bottom:30px;
+    animation:fadeUp 1s ease;
+}
+
+.gradient{
+    background:linear-gradient(90deg,#ffffff,#7f7fff,#4cc9f0);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+    color:#9f9f9f;
+    font-size:22px;
+    line-height:1.7;
+    max-width:850px;
+    margin:auto;
+    animation:fadeUp 1.3s ease;
+}
+
+.buttons{
+    margin-top:50px;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+    animation:fadeUp 1.6s ease;
+}
+
+.btn{
+    padding:18px 34px;
+    border:none;
+    border-radius:18px;
+    font-size:17px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.primary{
+    background:linear-gradient(90deg,#7f7fff,#4cc9f0);
+    color:white;
+    box-shadow:0 10px 40px rgba(127,127,255,.3);
+}
+
+.primary:hover{
+    transform:translateY(-5px);
+}
+
+.secondary{
+    background:rgba(255,255,255,.05);
+    color:white;
+    border:1px solid rgba(255,255,255,.1);
+}
+
+.secondary:hover{
+    background:rgba(255,255,255,.1);
+}
+
+.section{
+    padding:120px 30px;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:70px;
+}
+
+.title h2{
+    font-size:60px;
+    margin-bottom:20px;
+}
+
+.title p{
+    color:#999;
+    font-size:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:30px;
+    max-width:1400px;
+    margin:auto;
+}
+
+.card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:30px;
+    padding:35px;
+    transition:.4s;
+    backdrop-filter:blur(20px);
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    border-color:rgba(127,127,255,.4);
+}
+
+.card h3{
+    font-size:28px;
+    margin-bottom:20px;
+}
+
+.card p{
+    color:#aaa;
+    line-height:1.7;
+}
+
+.showcase{
+    display:flex;
+    justify-content:center;
+    margin-top:80px;
+}
+
+.window{
+    width:100%;
+    max-width:1100px;
+    background:#0f0f0f;
+    border-radius:30px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 40px 100px rgba(0,0,0,.5);
+}
+
+.window-top{
+    padding:18px;
+    display:flex;
+    gap:10px;
+    background:#161616;
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.circle{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+}
+
+.red{background:#ff5f57;}
+.yellow{background:#ffbd2f;}
+.green{background:#28ca42;}
+
+.code{
+    padding:40px;
+    font-size:18px;
+    line-height:2;
+    overflow:auto;
+    color:#ccc;
+}
+
+.code span{
+    color:#7f7fff;
+}
+
+footer{
+    padding:60px 30px;
+    text-align:center;
+    border-top:1px solid rgba(255,255,255,.05);
+    color:#777;
+}
+
+.glow{
+    position:absolute;
+    width:700px;
+    height:700px;
+    background:#4c6fff;
+    border-radius:50%;
+    filter:blur(200px);
+    opacity:.15;
+    z-index:-1;
+}
+
+.glow.one{
+    top:-200px;
+    left:-200px;
+}
+
+.glow.two{
+    bottom:-200px;
+    right:-200px;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(50px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media(max-width:900px){
+    nav{
+        padding:20px;
+    }
+
+    .hero h1{
+        font-size:70px;
+    }
+
+    .title h2{
+        font-size:45px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<div id="app"></div>
+<canvas id="bg"></canvas>
 
-<script src="project.js"></script>
+<div class="glow one"></div>
+<div class="glow two"></div>
 
-<script>
-const app = new ProjectJS({
+<nav>
+    <div class="logo">PROJECT.JS</div>
+
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Features</a>
+        <a href="#">Docs</a>
+        <a href="#">Github</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+
+        <div class="badge">
+            <div class="dot"></div>
+            Next Generation JavaScript Framework
+        </div>
+
+        <h1>
+            Build The Future<br>
+            With <span class="gradient">ProjectJS</span>
+        </h1>
+
+        <p>
+            A modern reactive JavaScript framework focused on speed,
+            simplicity and powerful UI rendering.
+            Create interactive applications with an elegant architecture.
+        </p>
+
+        <div class="buttons">
+            <button class="btn primary">
+                Get Started
+            </button>
+
+            <button class="btn secondary">
+                View Github
+            </button>
+        </div>
+
+    </div>
+</section>
+
+<section class="section">
+
+    <div class="title">
+        <h2>Features</h2>
+
+        <p>
+            Everything you need to create powerful applications.
+        </p>
+    </div>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>Reactive Core</h3>
+
+            <p>
+                High performance reactivity system with automatic updates and dynamic rendering.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Ultra Fast</h3>
+
+            <p>
+                Optimized rendering engine focused on speed and lightweight execution.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Component System</h3>
+
+            <p>
+                Create reusable components and scalable interfaces with ease.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Minimal API</h3>
+
+            <p>
+                Simple syntax designed for productivity and clean architecture.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="showcase">
+
+        <div class="window">
+
+            <div class="window-top">
+                <div class="circle red"></div>
+                <div class="circle yellow"></div>
+                <div class="circle green"></div>
+            </div>
+
+            <div class="code">
+<pre>
+<span>const</span> app = new ProjectJS({
+
     el: '#app',
 
     data: {
-        count: 0,
-        name: 'ProjectJS',
-        show: true,
-        items: [
-            'Apple',
-            'Banana',
-            'Orange'
-        ]
-    },
-
-    computed: {
-        double() {
-            return this.data.count * 2
-        }
+        count: 0
     },
 
     template: `
-        <h1>{{ name }}</h1>
+        &lt;h1&gt;{{ count }}&lt;/h1&gt;
 
-        <input pj-model="name">
-
-        <h2>{{ count }}</h2>
-
-        <h3>{{ double }}</h3>
-
-        <button pj-click="add">
+        &lt;button pj-click="add"&gt;
             Add
-        </button>
-
-        <button pj-click="toggle">
-            Toggle
-        </button>
-
-        <div pj-if="show">
-            Visible Content
-        </div>
-
-        <ul>
-            <li pj-for="item in items">
-                {{ item }}
-            </li>
-        </ul>
+        &lt;/button&gt;
     `,
 
     methods: {
         add() {
             this.data.count++
-        },
-
-        toggle() {
-            this.data.show =
-                !this.data.show
         }
-    },
-
-    mounted() {
-        console.log('Mounted')
     }
 })
+</pre>
+            </div>
 
-app.watch('count', value => {
-    console.log('Count:', value)
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    © 2026 ProjectJS Framework — Built for the future.
+</footer>
+
+<script>
+const canvas = document.getElementById('bg')
+const ctx = canvas.getContext('2d')
+
+canvas.width = innerWidth
+canvas.height = innerHeight
+
+const particles = []
+
+for(let i = 0; i < 120; i++){
+    particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2,
+        speedX: (Math.random() - .5) * .4,
+        speedY: (Math.random() - .5) * .4
+    })
+}
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+
+    particles.forEach(p => {
+
+        p.x += p.speedX
+        p.y += p.speedY
+
+        if(p.x < 0) p.x = canvas.width
+        if(p.x > canvas.width) p.x = 0
+
+        if(p.y < 0) p.y = canvas.height
+        if(p.y > canvas.height) p.y = 0
+
+        ctx.beginPath()
+        ctx.arc(p.x,p.y,p.size,0,Math.PI*2)
+        ctx.fillStyle = 'rgba(255,255,255,.5)'
+        ctx.fill()
+    })
+
+    requestAnimationFrame(animate)
+}
+
+animate()
+
+window.addEventListener('resize',() => {
+    canvas.width = innerWidth
+    canvas.height = innerHeight
 })
 </script>
 
