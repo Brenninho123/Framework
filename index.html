@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ProjectJS</title>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script src="project.js"></script>
+
+<script>
+const app = new ProjectJS({
+    el: '#app',
+
+    data: {
+        count: 0,
+        name: 'ProjectJS',
+        show: true,
+        items: [
+            'Apple',
+            'Banana',
+            'Orange'
+        ]
+    },
+
+    computed: {
+        double() {
+            return this.data.count * 2
+        }
+    },
+
+    template: `
+        <h1>{{ name }}</h1>
+
+        <input pj-model="name">
+
+        <h2>{{ count }}</h2>
+
+        <h3>{{ double }}</h3>
+
+        <button pj-click="add">
+            Add
+        </button>
+
+        <button pj-click="toggle">
+            Toggle
+        </button>
+
+        <div pj-if="show">
+            Visible Content
+        </div>
+
+        <ul>
+            <li pj-for="item in items">
+                {{ item }}
+            </li>
+        </ul>
+    `,
+
+    methods: {
+        add() {
+            this.data.count++
+        },
+
+        toggle() {
+            this.data.show =
+                !this.data.show
+        }
+    },
+
+    mounted() {
+        console.log('Mounted')
+    }
+})
+
+app.watch('count', value => {
+    console.log('Count:', value)
+})
+</script>
+
+</body>
+</html>
