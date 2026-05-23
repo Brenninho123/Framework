@@ -32,13 +32,14 @@ canvas{
 nav{
     position:fixed;
     top:0;
+    left:0;
     width:100%;
-    padding:22px 50px;
+    padding:20px 40px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    backdrop-filter:blur(10px);
-    background:rgba(0,0,0,.3);
+    background:rgba(0,0,0,.35);
+    backdrop-filter:blur(15px);
     border-bottom:1px solid rgba(255,255,255,.05);
     z-index:100;
 }
@@ -46,26 +47,33 @@ nav{
 .logo{
     font-size:28px;
     font-weight:900;
-    letter-spacing:2px;
-    background:linear-gradient(90deg,#ffffff,#7f7fff);
+    background:linear-gradient(90deg,#fff,#7d7dff);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
 
-.nav-links{
+.nav-right{
     display:flex;
-    gap:35px;
+    gap:15px;
+    align-items:center;
 }
 
-.nav-links a{
-    color:#aaa;
-    text-decoration:none;
-    transition:.3s;
-    font-weight:500;
+.online{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
 }
 
-.nav-links a:hover{
-    color:white;
+.status{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#44ff88;
+    box-shadow:0 0 15px #44ff88;
 }
 
 .hero{
@@ -74,69 +82,68 @@ nav{
     justify-content:center;
     align-items:center;
     text-align:center;
-    padding:120px 30px;
+    padding:120px 25px;
     position:relative;
 }
 
 .hero-content{
-    max-width:1000px;
+    max-width:1100px;
 }
 
 .badge{
     display:inline-flex;
-    align-items:center;
     gap:10px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.1);
+    align-items:center;
     padding:10px 18px;
     border-radius:999px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
     margin-bottom:30px;
-    backdrop-filter:blur(10px);
     animation:fadeUp 1s ease;
 }
 
-.dot{
+.badge-dot{
     width:10px;
     height:10px;
     border-radius:50%;
-    background:#7f7fff;
-    box-shadow:0 0 15px #7f7fff;
+    background:#7d7dff;
+    box-shadow:0 0 15px #7d7dff;
 }
 
 .hero h1{
-    font-size:clamp(60px,10vw,140px);
-    line-height:.9;
-    font-weight:900;
+    font-size:clamp(60px,10vw,130px);
+    line-height:.95;
     margin-bottom:30px;
-    animation:fadeUp 1s ease;
+    font-weight:900;
+    animation:fadeUp 1.2s ease;
 }
 
 .gradient{
-    background:linear-gradient(90deg,#ffffff,#7f7fff,#4cc9f0);
+    background:linear-gradient(90deg,#fff,#7d7dff,#4cc9f0);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
 
 .hero p{
-    color:#9f9f9f;
+    color:#999;
     font-size:22px;
     line-height:1.7;
     max-width:850px;
     margin:auto;
-    animation:fadeUp 1.3s ease;
+    animation:fadeUp 1.5s ease;
 }
 
 .buttons{
-    margin-top:50px;
+    margin-top:45px;
     display:flex;
     justify-content:center;
     gap:20px;
     flex-wrap:wrap;
-    animation:fadeUp 1.6s ease;
+    animation:fadeUp 1.8s ease;
 }
 
 .btn{
-    padding:18px 34px;
+    padding:18px 35px;
     border:none;
     border-radius:18px;
     font-size:17px;
@@ -146,9 +153,9 @@ nav{
 }
 
 .primary{
-    background:linear-gradient(90deg,#7f7fff,#4cc9f0);
+    background:linear-gradient(90deg,#7d7dff,#4cc9f0);
     color:white;
-    box-shadow:0 10px 40px rgba(127,127,255,.3);
+    box-shadow:0 10px 40px rgba(125,125,255,.3);
 }
 
 .primary:hover{
@@ -157,8 +164,8 @@ nav{
 
 .secondary{
     background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
     color:white;
-    border:1px solid rgba(255,255,255,.1);
 }
 
 .secondary:hover{
@@ -166,7 +173,7 @@ nav{
 }
 
 .section{
-    padding:120px 30px;
+    padding:120px 25px;
 }
 
 .title{
@@ -175,8 +182,8 @@ nav{
 }
 
 .title h2{
-    font-size:60px;
-    margin-bottom:20px;
+    font-size:55px;
+    margin-bottom:15px;
 }
 
 .title p{
@@ -186,84 +193,120 @@ nav{
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
     gap:30px;
     max-width:1400px;
     margin:auto;
 }
 
 .card{
+    padding:35px;
+    border-radius:30px;
     background:rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.06);
-    border-radius:30px;
-    padding:35px;
-    transition:.4s;
+    transition:.3s;
     backdrop-filter:blur(20px);
 }
 
 .card:hover{
     transform:translateY(-10px);
-    border-color:rgba(127,127,255,.4);
+    border-color:rgba(125,125,255,.4);
 }
 
 .card h3{
     font-size:28px;
-    margin-bottom:20px;
+    margin-bottom:18px;
 }
 
 .card p{
     color:#aaa;
+    line-height:1.8;
+}
+
+.online-panel{
+    margin-top:90px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    max-width:1400px;
+    margin-inline:auto;
+}
+
+.panel{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:30px;
+    overflow:hidden;
+    backdrop-filter:blur(20px);
+}
+
+.panel-header{
+    padding:20px 25px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.panel-body{
+    padding:25px;
+}
+
+.server-list{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.server{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px;
+    border-radius:18px;
+    background:rgba(255,255,255,.03);
+}
+
+.server-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.server-icon{
+    width:45px;
+    height:45px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#7d7dff,#4cc9f0);
+}
+
+.server-name{
+    font-weight:700;
+}
+
+.server-desc{
+    color:#888;
+    font-size:14px;
+}
+
+.players{
+    color:#44ff88;
+    font-weight:700;
+}
+
+.console{
+    background:#0b0b0b;
+    border-radius:20px;
+    padding:20px;
+    height:350px;
+    overflow:auto;
+    font-family:monospace;
+    color:#44ff88;
     line-height:1.7;
 }
 
-.showcase{
-    display:flex;
-    justify-content:center;
-    margin-top:80px;
-}
-
-.window{
-    width:100%;
-    max-width:1100px;
-    background:#0f0f0f;
-    border-radius:30px;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:0 40px 100px rgba(0,0,0,.5);
-}
-
-.window-top{
-    padding:18px;
-    display:flex;
-    gap:10px;
-    background:#161616;
-    border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.circle{
-    width:14px;
-    height:14px;
-    border-radius:50%;
-}
-
-.red{background:#ff5f57;}
-.yellow{background:#ffbd2f;}
-.green{background:#28ca42;}
-
-.code{
-    padding:40px;
-    font-size:18px;
-    line-height:2;
-    overflow:auto;
-    color:#ccc;
-}
-
-.code span{
-    color:#7f7fff;
-}
-
 footer{
-    padding:60px 30px;
+    padding:60px 25px;
     text-align:center;
     border-top:1px solid rgba(255,255,255,.05);
     color:#777;
@@ -273,7 +316,6 @@ footer{
     position:absolute;
     width:700px;
     height:700px;
-    background:#4c6fff;
     border-radius:50%;
     filter:blur(200px);
     opacity:.15;
@@ -281,19 +323,21 @@ footer{
 }
 
 .glow.one{
-    top:-200px;
-    left:-200px;
+    background:#4c6fff;
+    top:-250px;
+    left:-250px;
 }
 
 .glow.two{
-    bottom:-200px;
-    right:-200px;
+    background:#7d7dff;
+    bottom:-250px;
+    right:-250px;
 }
 
 @keyframes fadeUp{
     from{
         opacity:0;
-        transform:translateY(50px);
+        transform:translateY(40px);
     }
 
     to{
@@ -302,9 +346,10 @@ footer{
     }
 }
 
-@media(max-width:900px){
-    nav{
-        padding:20px;
+@media(max-width:1000px){
+
+    .online-panel{
+        grid-template-columns:1fr;
     }
 
     .hero h1{
@@ -313,6 +358,10 @@ footer{
 
     .title h2{
         font-size:45px;
+    }
+
+    nav{
+        padding:20px;
     }
 }
 </style>
@@ -326,129 +375,204 @@ footer{
 <div class="glow two"></div>
 
 <nav>
-    <div class="logo">PROJECT.JS</div>
+    <div class="logo">
+        PROJECT.JS
+    </div>
 
-    <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#">Features</a>
-        <a href="#">Docs</a>
-        <a href="#">Github</a>
+    <div class="nav-right">
+
+        <div class="online">
+            <div class="status"></div>
+            <span id="network-status">
+                Connecting...
+            </span>
+        </div>
+
     </div>
 </nav>
 
 <section class="hero">
+
     <div class="hero-content">
 
         <div class="badge">
-            <div class="dot"></div>
-            Next Generation JavaScript Framework
+            <div class="badge-dot"></div>
+            Real-Time Online Framework
         </div>
 
         <h1>
-            Build The Future<br>
+            Build Online Apps<br>
             With <span class="gradient">ProjectJS</span>
         </h1>
 
         <p>
-            A modern reactive JavaScript framework focused on speed,
-            simplicity and powerful UI rendering.
-            Create interactive applications with an elegant architecture.
+            A modern reactive framework with real-time online server support,
+            live networking, multiplayer systems and scalable architecture.
         </p>
 
         <div class="buttons">
-            <button class="btn primary">
-                Get Started
+
+            <button class="btn primary" onclick="connectServer()">
+                Connect Server
             </button>
 
             <button class="btn secondary">
-                View Github
+                Documentation
             </button>
+
         </div>
 
     </div>
+
 </section>
 
 <section class="section">
 
     <div class="title">
-        <h2>Features</h2>
+        <h2>Online Features</h2>
 
         <p>
-            Everything you need to create powerful applications.
+            Built for real-time applications and scalable networking.
         </p>
     </div>
 
     <div class="grid">
 
         <div class="card">
-            <h3>Reactive Core</h3>
+            <h3>Realtime Sync</h3>
 
             <p>
-                High performance reactivity system with automatic updates and dynamic rendering.
+                Synchronize data instantly between multiple connected clients.
             </p>
         </div>
 
         <div class="card">
-            <h3>Ultra Fast</h3>
+            <h3>Multiplayer Ready</h3>
 
             <p>
-                Optimized rendering engine focused on speed and lightweight execution.
+                Integrated architecture for multiplayer systems and live rooms.
             </p>
         </div>
 
         <div class="card">
-            <h3>Component System</h3>
+            <h3>NodeJS Server</h3>
 
             <p>
-                Create reusable components and scalable interfaces with ease.
+                Advanced online server backend with API routing and sockets.
             </p>
         </div>
 
         <div class="card">
-            <h3>Minimal API</h3>
+            <h3>Live Rendering</h3>
 
             <p>
-                Simple syntax designed for productivity and clean architecture.
+                Dynamic rendering engine optimized for online applications.
             </p>
         </div>
 
     </div>
 
-    <div class="showcase">
+    <div class="online-panel">
 
-        <div class="window">
+        <div class="panel">
 
-            <div class="window-top">
-                <div class="circle red"></div>
-                <div class="circle yellow"></div>
-                <div class="circle green"></div>
+            <div class="panel-header">
+                <h3>Servers</h3>
+
+                <span id="server-count">
+                    3 Online
+                </span>
             </div>
 
-            <div class="code">
-<pre>
-<span>const</span> app = new ProjectJS({
+            <div class="panel-body">
 
-    el: '#app',
+                <div class="server-list">
 
-    data: {
-        count: 0
-    },
+                    <div class="server">
+                        <div class="server-left">
+                            <div class="server-icon"></div>
 
-    template: `
-        &lt;h1&gt;{{ count }}&lt;/h1&gt;
+                            <div>
+                                <div class="server-name">
+                                    Europe Node
+                                </div>
 
-        &lt;button pj-click="add"&gt;
-            Add
-        &lt;/button&gt;
-    `,
+                                <div class="server-desc">
+                                    Frankfurt Server
+                                </div>
+                            </div>
+                        </div>
 
-    methods: {
-        add() {
-            this.data.count++
-        }
-    }
-})
-</pre>
+                        <div class="players">
+                            124ms
+                        </div>
+                    </div>
+
+                    <div class="server">
+                        <div class="server-left">
+                            <div class="server-icon"></div>
+
+                            <div>
+                                <div class="server-name">
+                                    US Node
+                                </div>
+
+                                <div class="server-desc">
+                                    New York Server
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="players">
+                            87ms
+                        </div>
+                    </div>
+
+                    <div class="server">
+                        <div class="server-left">
+                            <div class="server-icon"></div>
+
+                            <div>
+                                <div class="server-name">
+                                    Brazil Node
+                                </div>
+
+                                <div class="server-desc">
+                                    São Paulo Server
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="players">
+                            32ms
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <h3>Live Console</h3>
+
+                <span>
+                    ONLINE
+                </span>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="console" id="console">
+[ProjectJS] Booting Framework...
+[Network] Initializing realtime system...
+[Server] Starting websocket manager...
+[ProjectJS] Rendering online UI...
+                </div>
+
             </div>
 
         </div>
@@ -458,7 +582,7 @@ footer{
 </section>
 
 <footer>
-    © 2026 ProjectJS Framework — Built for the future.
+    © 2026 ProjectJS Framework — Online Edition
 </footer>
 
 <script>
@@ -472,15 +596,16 @@ const particles = []
 
 for(let i = 0; i < 120; i++){
     particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 2,
-        speedX: (Math.random() - .5) * .4,
-        speedY: (Math.random() - .5) * .4
+        x:Math.random() * canvas.width,
+        y:Math.random() * canvas.height,
+        size:Math.random() * 2,
+        speedX:(Math.random() - .5) * .4,
+        speedY:(Math.random() - .5) * .4
     })
 }
 
 function animate(){
+
     ctx.clearRect(0,0,canvas.width,canvas.height)
 
     particles.forEach(p => {
@@ -495,7 +620,7 @@ function animate(){
         if(p.y > canvas.height) p.y = 0
 
         ctx.beginPath()
-        ctx.arc(p.x,p.y,p.size,0,Math.PI*2)
+        ctx.arc(p.x,p.y,p.size,0,Math.PI * 2)
         ctx.fillStyle = 'rgba(255,255,255,.5)'
         ctx.fill()
     })
@@ -509,6 +634,46 @@ window.addEventListener('resize',() => {
     canvas.width = innerWidth
     canvas.height = innerHeight
 })
+
+const consoleEl = document.getElementById('console')
+
+function log(text){
+
+    consoleEl.innerHTML += `
+<br>${text}
+    `
+
+    consoleEl.scrollTop =
+        consoleEl.scrollHeight
+}
+
+function connectServer(){
+
+    const status =
+        document.getElementById(
+            'network-status'
+        )
+
+    status.innerText =
+        'Connected'
+
+    log('[Network] Connected to server')
+    log('[Socket] Authenticating client...')
+    log('[ProjectJS] Realtime synchronization enabled')
+    log('[Server] Connection established')
+}
+
+setTimeout(() => {
+    log('[Realtime] Syncing data...')
+},1500)
+
+setTimeout(() => {
+    log('[Realtime] Connected clients: 124')
+},3000)
+
+setTimeout(() => {
+    log('[Server] Ping stable: 32ms')
+},4500)
 </script>
 
 </body>
