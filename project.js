@@ -1,32 +1,41 @@
-class ProjectJS {
-    constructor(options = {}) {
-        this.$el =
-            typeof options.el === 'string'
-                ? document.querySelector(options.el)
-                : options.el
+export default class ProjectJS {
+    constructor(config = {}) {
+        this.version = '1.0.0'
 
-        this.$template = options.template || ''
-        this.$methods = options.methods || {}
-        this.$watchers = {}
-        this.$mounted = false
-        this.$events = []
-        this.$computed = options.computed || {}
+        this.el =
+            typeof config.el === 'string'
+                ? document.querySelector(config.el)
+                : config.el
 
-        this.data = this.#reactive(options.data || {})
+        this.template = config.template || ''
+        this.methods = config.methods || {}
+        this.components = config.components || {}
+        this.watchers = {}
+        this.hooks = {
+            mounted: config.mounted || null,
+            updated: config.updated || null
+        }
+
+        this.eventCache = []
+
+        this.state = this.#reactive(
+            config.data || {}
+        )
+
+        this.computed = config.computed || {}
 
         this.#initComputed()
+
         this.#render()
 
-        if (options.mounted)
-            options.mounted.call(this)
-
-        this.$mounted = true
+        if (this.hooks.mounted)
+            this.hooks.mounted.call(this)
     }
 
-    #reactive(obj) {
+    #reactive(object) {
         const self = this
 
-        return new Proxy(obj, {
+        return new Proxy(object, {
             get(target, key) {
                 return target[key]
             },
@@ -34,11 +43,11 @@ class ProjectJS {
             set(target, key, value) {
                 target[key] = value
 
-                self.#updateComputed()
-                self.#render()
+                self.#update()
 
-                if (self.$watchers[key]) {
-                    self.$watchers[key].forEach(fn => fn(value))
+                if (self.watchers[key]) {
+                    self.watchers[key]
+                        .forEach(fn => fn(value))
                 }
 
                 return true
@@ -47,145 +56,106 @@ class ProjectJS {
     }
 
     #initComputed() {
-        for (const key in this.$computed) {
-            Object.defineProperty(this.data, key, {
-                get: () => {
-                    return this.$computed[key].call(this)
-                }
+        Object.keys(this.computed)
+            .forEach(key => {
+                Object.defineProperty(
+                    this.state,
+                    key,
+                    {
+                        get: () => {
+                            return this.computed[key]
+                                .call(this)
+                        }
+                    }
+                )
             })
-        }
-    }
-
-    #updateComputed() {
-        for (const key in this.$computed) {
-            this.data[key]
-        }
     }
 
     watch(key, callback) {
-        if (!this.$watchers[key])
-            this.$watchers[key] = []
+        if (!this.watchers[key])
+            this.watchers[key] = []
 
-        this.$watchers[key].push(callback)
+        this.watchers[key]
+            .push(callback)
     }
 
     set(key, value) {
-        this.data[key] = value
+        this.state[key] = value
     }
 
     get(key) {
-        return this.data[key]
+        return this.state[key]
     }
 
-    #parse(html) {
-        html = html.replace(/\{\{(.*?)\}\}/g, (_, expr) => {
-            try {
-                return new Function(
-                    'data',
-                    `with(data){ return ${expr} }`
-                )(this.data)
-            } catch {
-                return ''
-            }
-        })
+    component(name, template) {
+        this.components[name] = template
 
-        return html
+        this.#update()
     }
 
-    #clearEvents() {
-        this.$events.forEach(event => {
+    emit(event, detail = {}) {
+        window.dispatchEvent(
+            new CustomEvent(event, {
+                detail
+            })
+        )
+    }
+
+    on(event, callback) {
+        window.addEventListener(
+            event,
+            callback
+        )
+    }
+
+    use(plugin) {
+        plugin(this)
+    }
+
+    destroy() {
+        this.eventCache.forEach(event => {
             event.el.removeEventListener(
                 event.type,
                 event.fn
             )
         })
 
-        this.$events = []
+        this.el.innerHTML = ''
     }
 
-    #bindEvents() {
-        const events = [
-            'click',
-            'input',
-            'change',
-            'submit'
-        ]
-
-        events.forEach(type => {
-            this.$el.querySelectorAll(`[pj-${type}]`)
-                .forEach(el => {
-                    const method =
-                        el.getAttribute(`pj-${type}`)
-
-                    if (!this.$methods[method]) return
-
-                    const fn = e => {
-                        this.$methods[method].call(
-                            this,
-                            e
-                        )
-                    }
-
-                    el.addEventListener(type, fn)
-
-                    this.$events.push({
-                        el,
-                        type,
-                        fn
-                    })
-                })
-        })
-
-        this.$el.querySelectorAll('[pj-model]')
-            .forEach(el => {
-                const key =
-                    el.getAttribute('pj-model')
-
-                el.value = this.data[key]
-
-                const fn = e => {
-                    this.data[key] = e.target.value
+    #evaluate(expression) {
+        try {
+            return new Function(
+                'state',
+                `
+                with(state){
+                    return ${expression}
                 }
-
-                el.addEventListener('input', fn)
-
-                this.$events.push({
-                    el,
-                    type: 'input',
-                    fn
-                })
-            })
+                `
+            )(this.state)
+        } catch {
+            return ''
+        }
     }
 
-    #renderLoops(html) {
+    #parseVariables(html) {
         return html.replace(
-            /<(.+?)\s+pj-for="(.*?)\s+in\s+(.*?)">(.*?)<\/\1>/gs,
-            (_, tag, item, list, content) => {
-                const arr =
-                    this.data[list.trim()] || []
-
-                return arr.map(value => {
-                    return `<${tag}>${content.replace(
-                        new RegExp(`\\{\\{\\s*${item}\\s*\\}\\}`, 'g'),
-                        value
-                    )}</${tag}>`
-                }).join('')
+            /\{\{(.*?)\}\}/g,
+            (_, expression) => {
+                return this.#evaluate(
+                    expression.trim()
+                )
             }
         )
     }
 
-    #renderConditions(html) {
+    #parseConditions(html) {
         return html.replace(
             /<(.+?)\s+pj-if="(.*?)">(.*?)<\/\1>/gs,
             (_, tag, condition, content) => {
-                let result = false
 
-                try {
-                    result = new Function(
-                        'data',
-                        `with(data){ return ${condition} }`
-                    )(this.data)
-                } catch {}
+                const result =
+                    this.#evaluate(condition)
 
                 return result
                     ? `<${tag}>${content}</${tag}>`
@@ -194,21 +164,158 @@ class ProjectJS {
         )
     }
 
+    #parseLoops(html) {
+        return html.replace(
+            /<(.+?)\s+pj-for="(.*?)\s+in\s+(.*?)">(.*?)<\/\1>/gs,
+            (_, tag, item, arrayName, content) => {
+
+                const array =
+                    this.#evaluate(arrayName)
+
+                if (!Array.isArray(array))
+                    return ''
+
+                return array.map(value => {
+
+                    let result = content
+
+                    result = result.replace(
+                        new RegExp(
+                            `\\{\\{\\s*${item}\\s*\\}\\}`,
+                            'g'
+                        ),
+                        value
+                    )
+
+                    return `<${tag}>${result}</${tag}>`
+
+                }).join('')
+            }
+        )
+    }
+
+    #parseComponents(html) {
+        Object.keys(this.components)
+            .forEach(component => {
+
+                const regex =
+                    new RegExp(
+                        `<${component}></${component}>`,
+                        'g'
+                    )
+
+                html = html.replace(
+                    regex,
+                    this.components[component]
+                )
+            })
+
+        return html
+    }
+
+    #clearEvents() {
+        this.eventCache.forEach(event => {
+            event.el.removeEventListener(
+                event.type,
+                event.fn
+            )
+        })
+
+        this.eventCache = []
+    }
+
+    #bindEvents() {
+        const events = [
+            'click',
+            'input',
+            'change',
+            'submit',
+            'mouseover',
+            'keydown'
+        ]
+
+        events.forEach(type => {
+
+            this.el.querySelectorAll(
+                `[pj-${type}]`
+            ).forEach(el => {
+
+                const method =
+                    el.getAttribute(
+                        `pj-${type}`
+                    )
+
+                if (!this.methods[method])
+                    return
+
+                const fn = e => {
+                    this.methods[method]
+                        .call(this, e)
+                }
+
+                el.addEventListener(
+                    type,
+                    fn
+                )
+
+                this.eventCache.push({
+                    el,
+                    type,
+                    fn
+                })
+            })
+        })
+
+        this.el.querySelectorAll(
+            '[pj-model]'
+        ).forEach(el => {
+
+            const model =
+                el.getAttribute(
+                    'pj-model'
+                )
+
+            el.value = this.state[model]
+
+            const fn = e => {
+                this.state[model] =
+                    e.target.value
+            }
+
+            el.addEventListener(
+                'input',
+                fn
+            )
+
+            this.eventCache.push({
+                el,
+                type: 'input',
+                fn
+            })
+        })
+    }
+
     #render() {
-        if (!this.$el) return
+        if (!this.el) return
 
         this.#clearEvents()
 
-        let html = this.$template
+        let html = this.template
 
-        html = this.#renderLoops(html)
-        html = this.#renderConditions(html)
-        html = this.#parse(html)
+        html = this.#parseComponents(html)
+        html = this.#parseConditions(html)
+        html = this.#parseLoops(html)
+        html = this.#parseVariables(html)
 
-        this.$el.innerHTML = html
+        this.el.innerHTML = html
 
         this.#bindEvents()
     }
-}
 
-window.ProjectJS = ProjectJS
+    #update() {
+        this.#render()
+
+        if (this.hooks.updated)
+            this.hooks.updated.call(this)
+    }
+}
